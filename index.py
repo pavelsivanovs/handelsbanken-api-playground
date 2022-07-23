@@ -77,7 +77,9 @@ class Handelsbanken:
             'client_id': self.client_id
         }
 
-        r = requests.post(f'{self.BASE_URL}/oauth2/token/1.0', data=payload, headers=headers)
+        r = requests.post(f'{self.BASE_URL}/oauth2/token/1.0',
+                          headers=headers,
+                          data=payload)
         json_body = r.json()
         self.access_token = json_body['access_token']
 
@@ -99,7 +101,9 @@ class Handelsbanken:
             'access': 'ALL_ACCOUNTS'
         }
 
-        r = requests.post(f'{self.BASE_URL}/psd2/v1/consents', json=payload, headers=headers)
+        r = requests.post(f'{self.BASE_URL}/psd2/v1/consents',
+                          headers=headers,
+                          json=payload)
         json_body = r.json()
 
         self.consent_id = json_body['consentId']
@@ -125,7 +129,9 @@ class Handelsbanken:
             'state': 'state'
         }
 
-        r = requests.get(f'{self.authorization_endpoint}', headers=self.DEFAULT_HEADERS, params=params)
+        r = requests.get(f'{self.authorization_endpoint}',
+                         headers=self.DEFAULT_HEADERS,
+                         params=params)
         pattern = re.compile('var authorizationCode = \'(.*?)\';')
         self.authorization_code = pattern.search(r.text).group(1)
 
@@ -146,7 +152,9 @@ class Handelsbanken:
             'redirect_uri': self.REDIRECT_URI
         }
 
-        r = requests.post(f'{self.BASE_URL}/redirect/oauth2/token/1.0', headers=headers, data=payload)
+        r = requests.post(f'{self.BASE_URL}/redirect/oauth2/token/1.0',
+                          headers=headers,
+                          data=payload)
         json_body = r.json()
         self.refresh_token = json_body['refresh_token']
         self.auth_access_token = json_body['access_token']
@@ -159,7 +167,8 @@ class Handelsbanken:
         """
         headers = self.ais_endpoint_headers
 
-        r = requests.get(f'{self.BASE_URL}/psd2/v2/accounts', headers=headers)
+        r = requests.get(f'{self.BASE_URL}/psd2/v2/accounts',
+                         headers=headers)
         return r.json()['accounts']
 
     def get_transactions(self, account_id) -> dict:
@@ -171,7 +180,8 @@ class Handelsbanken:
         """
         headers = self.ais_endpoint_headers
 
-        r = requests.get(f'{self.BASE_URL}/psd2/v2/accounts/{account_id}/transactions', headers=headers)
+        r = requests.get(f'{self.BASE_URL}/psd2/v2/accounts/{account_id}/transactions',
+                         headers=headers)
         return r.json()['transactions']
 
 
