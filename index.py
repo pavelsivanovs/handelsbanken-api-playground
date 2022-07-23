@@ -43,7 +43,11 @@ class Handelsbanken:
         self.authorize()
 
     @property
-    def ais_endpoint_headers(self):
+    def ais_endpoint_headers(self) -> dict:
+        """
+        Lazy property which returns the set of headers required for requests on AIS API endpoints.
+        :return: dictionary of headers.
+        """
         return {
             **self.DEFAULT_HEADERS,
             'x-ibm-client-id': self.client_id,
